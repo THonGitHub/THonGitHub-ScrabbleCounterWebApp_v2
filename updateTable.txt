@@ -1,0 +1,47 @@
+Protected Sub TextBox_zadat_body_za_slovo_TextChanged(sender As Object, e As EventArgs)
+    Dim input As String = TextBox_zadat_body_za_slovo.Text.Trim()
+    Pridat_body_za_slovo(input)
+
+    ' Re-generate or rebind the table after updating the data
+    GenerateOrUpdateDynamicTable()
+End Sub
+
+Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+    ' Ensure the table is generated or updated during every page load
+    If Not IsPostBack Then
+        GenerateOrUpdateDynamicTable()
+    End If
+End Sub
+
+Private Sub GenerateOrUpdateDynamicTable()
+    ' Retrieve the list of selected players from session
+    Dim selectedPlayersList As List(Of SelectedPlayer) = TryCast(Session("SelectedPlayersList"), List(Of SelectedPlayer))
+
+    ' Check if the list is not null and contains players
+    If selectedPlayersList IsNot Nothing AndAlso selectedPlayersList.Count > 0 Then
+        ' Clear the existing table rows before regenerating
+        Table_hraci.Rows.Clear()
+
+        ' Add the table header
+        Dim headerRow As New TableHeaderRow()
+
+        ' ... (code to add table header cells)
+
+        ' Add the header row to the table
+        Table_hraci.Rows.Add(headerRow)
+
+        ' Iterate through each player and add rows to the table
+        For Each selectedPlayer As SelectedPlayer In selectedPlayersList
+            ' Add rows dynamically using AddRowToTable method (similar to your existing logic)
+            AddRowToTable(selectedPlayer.PlayerID, selectedPlayer.PlayerName, 0, 0, 0)
+        Next
+    Else
+        ' Display a message or handle the case when there are no selected players
+        Label_1sprava.Text = "No data available"
+    End If
+End Sub
+
+' AddRowToTable method remains unchanged as per your existing logic
+Private Sub AddRowToTable(playerID_from_session As Integer, playerName_from_session As String, body_za_slovo As Integer, body_spolu As Integer, top_body_za_slovo As Integer)
+    ' ... (existing code to add rows to the table)
+End Sub
